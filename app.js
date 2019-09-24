@@ -251,7 +251,7 @@ class Bot {
             this.currentAction = "rotating-random"
 
             this.motor.move('right', {
-                time: Math.random()
+                time: Math.random()*2
             })
 
             this.resetWatchingTimeout()
@@ -297,6 +297,9 @@ class Bot {
             this.currentAction = "stopping"
 
             this.motor.stop()
+            setTimeout(() => {
+                this.motor.move('stop')
+            }, 200)
 
             this.resetWatchingTimeout()
 
