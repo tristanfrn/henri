@@ -248,7 +248,7 @@ class Bot {
         if(this.currentAction == "watching"){
 
             console.log('Watching, taking picture')
-            
+
             this.picture_i = this.picture_i === undefined ? 1 : this.picture_i;
             this.picture_i = this.picture_i == 0 ? 1 : 0;
 
@@ -303,7 +303,7 @@ class Bot {
     gotEvent(event, min, callback){
 
         min = min/100
-
+        
         this.eventsCounts = this.eventsCounts == undefined ? {} : this.eventsCounts
         this.eventsTimeouts = this.eventsTimeouts == undefined ? {} : this.eventsTimeouts
 
@@ -317,12 +317,21 @@ class Bot {
         console.log(event+' '+this.eventsCounts[event])
         if(this.eventsCounts[event] >= min){
             callback()
+            this.lastActionTimestamp = Math.round(new Date().getTime()/1000)
         }
 
         this.eventsTimeouts[event] = setTimeout(() => {
             this.eventsCounts[event] = 0
         }, 300)
 
+    }
+
+    getLastActionTime(){
+        if(this.lastActionTimestamp !== undefined){
+            return (Math.round(new Date().getTime()/1000)) - this.lastActionTimestamp
+        }else{
+            return 0
+        }
     }
 
     init(){
@@ -345,7 +354,8 @@ class Bot {
         setInterval(() => {
             
             if(this.isActive === true){
-                         
+                
+                console.log(this.getLastActionTime())
                 if(this.currentAction == "watching"){
                     
                     var distance = this.ranging.values
