@@ -279,7 +279,8 @@ class Bot {
             console.log('moving-forward')
             this.currentAction = "moving-forward"
 
-            this.servoVertical.move(120)
+            this.servoHorizontal.move(90)
+            this.servoVertical.move(120, 600)
 
             this.motor.move('forward', {
                 time: 10
@@ -442,7 +443,7 @@ class Bot {
 
                 }else if(this.currentAction == "watching"){
                     
-                    if(this.getLastActionTime() > 10){
+                    if(this.getLastActionTime() > 30){
                         this.gotEvent('nothing-happens', 1000, () => {
                             
                             this.rotateRandom(() => {
@@ -475,7 +476,7 @@ class Bot {
 
                 }else{
 
-                    if(this.getLastActionTime() >= 3){
+                    if(this.getLastActionTime() >= 4){
                         this.watching()
                     }
                     
