@@ -283,7 +283,7 @@ class Bot {
             this.servoVertical.move(120, 600)
 
             this.motor.move('forward', {
-                time: 10
+                time: 6
             })
 
             // setTimeout(() => {
@@ -443,7 +443,7 @@ class Bot {
 
                 }else if(this.currentAction == "watching"){
                     
-                    if(this.getLastActionTime() > 30){
+                    if(this.getLastActionTime() > 20){
                         this.gotEvent('nothing-happens', 1000, () => {
                             
                             this.rotateRandom(() => {
@@ -462,13 +462,13 @@ class Bot {
 
                     if(this.infrared.values.right == false){
                         
-                        this.gotEvent('object-near-right', 1000, () => {
+                        this.gotEvent('object-near-right', 500, () => {
                             this.escapeLeft()
                         })
                         
                     }else if(this.infrared.values.left == false){
                         
-                        this.gotEvent('object-near-left', 1000, () => {
+                        this.gotEvent('object-near-left', 500, () => {
                             this.escapeRight()
                         })
                 
