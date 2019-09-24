@@ -92,7 +92,6 @@ class Motor {
                 var temp_status = data.toString().trim()
                 if(temp_status == "ended"){
                     this.status = "ended"
-
                     if(callback != undefined){
                         callback()
                     }
@@ -101,6 +100,15 @@ class Motor {
                     this.status = "moving"
                 }
             })
+
+            setTimeout(() => {
+                if(this.status != "ended"){
+                    this.status = "ended"
+                    if(callback != undefined){
+                        callback()
+                    }
+                }
+            }, 10000)
 
         }else{
             console.log('last action not ended')
@@ -201,7 +209,7 @@ class Bot {
             // this.servoVertical.move(40, 500)
             this.servoVertical.move(140)
     
-            this.resetWatchingTimeout()
+            // this.resetWatchingTimeout()
 
         }
     }
@@ -217,11 +225,11 @@ class Bot {
             this.servoHorizontal.move(30, 500)
             // var vertical_angle = Math.floor(Math.random() * 40 + 90)
             
-            // this.motor.move('left', {
-            //     time: 0.25
-            // })
+            this.motor.move('left', {
+                time: 0.25
+            })
 
-            this.resetWatchingTimeout()
+            // this.resetWatchingTimeout()
 
         }
 
@@ -238,11 +246,11 @@ class Bot {
             this.servoHorizontal.move(140, 500)
             // var vertical_angle = Math.floor(Math.random() * 40 + 90)
 
-            // this.motor.move('right', {
-            //     time: 0.25
-            // })
+            this.motor.move('right', {
+                time: 0.25
+            })
 
-            this.resetWatchingTimeout()
+            // this.resetWatchingTimeout()
         }
 
     }
@@ -258,7 +266,6 @@ class Bot {
                 time: Math.random()*2
             }, callback)
 
-            this.resetWatchingTimeout()
         }
 
     }
@@ -273,6 +280,10 @@ class Bot {
             this.motor.move('forward', {
                 time: 10
             })
+
+            // setTimeout(() => {
+            //     this.resetWatchingTimeout()
+            // }, 10000)
 
         }
 
@@ -305,7 +316,7 @@ class Bot {
                 this.motor.move('stop')
             }, 500)
 
-            this.resetWatchingTimeout()
+            // this.resetWatchingTimeout()
 
         }
 
@@ -350,14 +361,14 @@ class Bot {
         
     }
 
-    resetWatchingTimeout(){
-        if(this.watchingTimeout != null){
-            clearTimeout(this.watchingTimeout)
-        }
-        this.watchingTimeout = setTimeout(() => {
-            this.watching()
-        }, 1000)
-    }
+    // resetWatchingTimeout(){
+    //     if(this.watchingTimeout != null){
+    //         clearTimeout(this.watchingTimeout)
+    //     }
+    //     this.watchingTimeout = setTimeout(() => {
+    //         this.watching()
+    //     }, 2000)
+    // }
 
     gotEvent(event, min, callback){
 
@@ -461,6 +472,12 @@ class Bot {
                 
                     }
 
+                }else{
+
+                    if(this.getLastActionTime() >= 3){
+                        this.watching()
+                    }
+                    
                 }
 
             }
