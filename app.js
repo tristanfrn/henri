@@ -337,7 +337,7 @@ class Bot {
             this.watching()
 
             setTimeout(() => {
-                this.checkMovement()
+                // this.checkMovement()
             }, 1000)
 
         }, 1000)
