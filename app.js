@@ -408,7 +408,7 @@ class Bot {
 
                 if(this.currentAction == "watching"){
                     
-                    if(this.getLastActionTime() > 30){
+                    if(this.getLastActionTime() > 10){
                         this.gotEvent('nothing-happens', 1000, () => {
                             
                             this.rotateRandom()
