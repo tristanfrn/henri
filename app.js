@@ -274,6 +274,21 @@ class Bot {
 
     }
 
+    moveBackward(){
+        
+        if(this.currentAction !== "moving-forward"){
+
+            console.log('moving-forward')
+            this.currentAction = "moving-forward"
+
+            this.motor.move('backward', {
+                time: 2
+            })
+
+        }
+
+    }
+
     stop(){
         
         if(this.currentAction !== "stopping"){
@@ -281,7 +296,7 @@ class Bot {
             console.log('stopping')
             this.currentAction = "stopping"
 
-            this.motor.move('stop')
+            this.motor.stop()
 
             this.resetWatchingTimeout()
 
