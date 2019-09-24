@@ -242,6 +242,52 @@ class Bot {
         }
 
     }
+    
+    rotateRandom(callback){
+
+        if(this.currentAction !== "rotating-random"){
+
+            console.log('rotating-random')
+            this.currentAction = "rotating-random"
+
+            this.motor.move('right', {
+                time: Math.random()
+            })
+
+            this.resetWatchingTimeout()
+        }
+
+    }
+
+    moveForward(){
+        
+        if(this.currentAction !== "moving-forward"){
+
+            console.log('moving-forward')
+            this.currentAction = "moving-forward"
+
+            this.motor.move('forward', {
+                time: 10
+            })
+
+        }
+
+    }
+
+    stop(){
+        
+        if(this.currentAction !== "stopping"){
+
+            console.log('stopping')
+            this.currentAction = "stopping"
+
+            this.motor.move('stop')
+
+            this.resetWatchingTimeout()
+
+        }
+
+    }
 
     checkMovement(){
 
@@ -288,7 +334,7 @@ class Bot {
         }
         this.watchingTimeout = setTimeout(() => {
             this.watching()
-        }, 3000)
+        }, 1000)
     }
 
     gotEvent(event, min, callback){
@@ -308,13 +354,17 @@ class Bot {
         console.log(event+' '+this.eventsCounts[event])
         if(this.eventsCounts[event] >= min){
             callback()
-            this.lastActionTimestamp = Math.round(new Date().getTime()/1000)
+            this.setLastActionTime()
         }
 
         this.eventsTimeouts[event] = setTimeout(() => {
             this.eventsCounts[event] = 0
         }, 300)
 
+    }
+
+    setLastActionTime(){
+        this.lastActionTimestamp = Math.round(new Date().getTime()/1000)
     }
 
     getLastActionTime(){
@@ -334,6 +384,7 @@ class Bot {
             console.log('activating bot')
             this.isActive = true
 
+            this.setLastActionTime()
             this.watching()
 
             setTimeout(() => {
@@ -346,9 +397,28 @@ class Bot {
             
             if(this.isActive === true){
                 
-                console.log(this.getLastActionTime())
+                if(this.currentAction == "moving-forward"){
+                    var distance = this.ranging.values
+                    if(distance < 40){
+                        this.gotEvent('object-near', 300, () => {
+                            this.stop()
+                        })
+                    }
+                }
+
                 if(this.currentAction == "watching"){
                     
+                    if(this.getLastActionTime() > 30){
+                        this.gotEvent('nothing-happens', 1000, () => {
+                            
+                            this.rotateRandom()
+                            setTimeout(() => {
+                                this.moveForward()
+                            }, 2000)
+
+                        })
+                    }
+
                     var distance = this.ranging.values
                     if(distance < 15){
                         this.gotEvent('object-near', 300, () => {
