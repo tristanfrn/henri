@@ -67,7 +67,7 @@ class Motor {
         this.process = null
         this.status = "ended"
     }
-    move(direction, options) {
+    move(direction, options, callback) {
         
         if(this.status === "ended") {
 
@@ -92,6 +92,10 @@ class Motor {
                 var temp_status = data.toString().trim()
                 if(temp_status == "ended"){
                     this.status = "ended"
+
+                    if(callback != undefined){
+                        callback()
+                    }
                 }
                 if(temp_status == "moving"){
                     this.status = "moving"
@@ -251,8 +255,8 @@ class Bot {
             this.currentAction = "rotating-random"
 
             this.motor.move('right', {
-                time: Math.random()
-            })
+                time: Math.random()*2
+            }, callback)
 
             this.resetWatchingTimeout()
         }
@@ -299,7 +303,7 @@ class Bot {
             this.motor.stop()
             setTimeout(() => {
                 this.motor.move('stop')
-            }, 200)
+            }, 500)
 
             this.resetWatchingTimeout()
 
@@ -429,10 +433,9 @@ class Bot {
                     if(this.getLastActionTime() > 10){
                         this.gotEvent('nothing-happens', 1000, () => {
                             
-                            this.rotateRandom()
-                            setTimeout(() => {
+                            this.rotateRandom(() => {
                                 this.moveForward()
-                            }, 2000)
+                            })
 
                         })
                     }
