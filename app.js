@@ -119,7 +119,9 @@ class Motor {
     stop() {
         this.lastDirection = null
         this.process.kill('SIGTERM')
-        this.move('stop')
+        setTimeout(() => {
+            this.move('stop')
+        }, 400)
     }
 }
 
@@ -277,6 +279,8 @@ class Bot {
             console.log('moving-forward')
             this.currentAction = "moving-forward"
 
+            this.servoVertical.move(120)
+
             this.motor.move('forward', {
                 time: 10
             })
@@ -312,9 +316,6 @@ class Bot {
             this.currentAction = "stopping"
 
             this.motor.stop()
-            setTimeout(() => {
-                this.motor.move('stop')
-            }, 500)
 
             // this.resetWatchingTimeout()
 
@@ -431,15 +432,15 @@ class Bot {
             if(this.isActive === true){
                 
                 if(this.currentAction == "moving-forward"){
+
                     var distance = this.ranging.values
                     if(distance < 40){
                         this.gotEvent('object-near', 300, () => {
                             this.stop()
                         })
                     }
-                }
 
-                if(this.currentAction == "watching"){
+                }else if(this.currentAction == "watching"){
                     
                     if(this.getLastActionTime() > 10){
                         this.gotEvent('nothing-happens', 1000, () => {
