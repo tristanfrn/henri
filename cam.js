@@ -6,7 +6,7 @@ var picture_i = 0
 
 function checkMovement(){
 
-    console.log('Watching, taking picture')
+    console.log('taking picture')
 
     picture_i = picture_i == 0 ? 1 : 0;
 
@@ -28,9 +28,9 @@ function checkMovement(){
                     Jimp.read('cam1.jpg')
                     .then(image2 => {
                         console.log('calculating diff ...')
-                        var distance = Jimp.distance(image1, image2)
-                            // var diff = Jimp.diff(image1, image2)
-                            console.log(distance)
+                            // var distance = Jimp.distance(image1, image2)
+                            var diff = Jimp.diff(image1, image2)
+                            console.log(diff)
                             checkMovement()
                         })
                         .catch(err => {
