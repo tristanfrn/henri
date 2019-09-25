@@ -199,9 +199,10 @@ class Bot {
 
             this.currentAction = "watching"
     
-            this.stop()
-            this.servoHorizontal.move(90)
-            this.servoVertical.move(40, 700)
+            this.stop(() => {
+                this.servoHorizontal.move(90)
+                this.servoVertical.move(40, 700)
+            })
 
         }
 
