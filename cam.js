@@ -30,7 +30,7 @@ function checkMovement(){
                         console.log('calculating diff ...')
                             // var distance = Jimp.distance(image1, image2)
                             var diff = Jimp.diff(image1, image2)
-                            console.log(diff)
+                            console.log((diff.percent*100).toFixed(0)+'%')
                             checkMovement()
                         })
                         .catch(err => {
