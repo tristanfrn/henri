@@ -11,11 +11,14 @@ function checkMovement(){
 
     spawn('raspistill', ['-o', 'raspistill -w 480 -h 360 -n -gc -th none -x none -t 2000 -o '+picture_i+'.jpg'])
     
+    console.log('opening cam0 ...')
     Jimp.read('cam0.jpg')
-        .then(image1 => {
+    .then(image1 => {
+            console.log('opening cam1 ...')
             Jimp.read('cam1.jpg')
-                .then(image2 => {
-                    var distance = Jimp.distance(image1, image2)
+            .then(image2 => {
+                console.log('calculating diff ...')
+                var distance = Jimp.distance(image1, image2)
                     // var diff = Jimp.diff(image1, image2)
                     console.log(distance)
                     checkMovement()
