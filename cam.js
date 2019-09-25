@@ -4,20 +4,20 @@ const PiCamera = require('pi-camera');
 
 var picture_i = 0
 
-const camera = new PiCamera({
-    mode: 'photo',
-    output: `${ __dirname }/'cam${ picture_i }.jpg'`,
-    width: 640,
-    height: 480,
-    timeout: 2000,
-    nopreview: true
-})
-
 function checkMovement(){
 
     console.log('Watching, taking picture')
 
     picture_i = picture_i == 0 ? 1 : 0;
+
+    let camera = new PiCamera({
+        mode: 'photo',
+        output: `${ __dirname }/'cam${ picture_i }.jpg'`,
+        width: 640,
+        height: 480,
+        timeout: 2000,
+        nopreview: true
+    })
 
     camera.snap()
         .then((result) => {
