@@ -197,10 +197,10 @@ class Bot {
 
             console.log('watching')
     
-            this.servoHorizontal.move(90, () => {
+            this.servoHorizontal.move(90, 0, () => {
                 this.servoVertical.move(40, 700)
             })
-            
+
             this.currentAction = "watching"
 
         }
@@ -215,7 +215,7 @@ class Bot {
     
             // this.servoHorizontal.move(90, 0, () => {
                 // this.servoVertical.move(40, 0, () => {
-                    this.servoVertical.move(140, callback)
+                    this.servoVertical.move(140, 0, callback)
                 // })
             // })
 
@@ -244,7 +244,7 @@ class Bot {
             console.log('moving-forward')
             this.currentAction = "moving-forward"
 
-            this.servoHorizontal.move(90, () => {
+            this.servoHorizontal.move(90, 0, () => {
                 this.servoVertical.move(120)
             })
 
@@ -419,7 +419,9 @@ class Bot {
                     var distance = this.ranging.values
                     if(distance < 40){
                         this.gotEvent('object-near', 300, () => {
+                            console.log('call attack');
                             this.attack(() => {
+                                console.log('callback attach');
                                 this.moveBackward(2, this.watching)
                             })
                         })
