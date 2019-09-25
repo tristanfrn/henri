@@ -443,7 +443,7 @@ class Bot {
 
                 }else if(this.currentAction == "watching"){
                     
-                    if(this.getLastActionTime() > 20){
+                    if(this.getLastActionTime() > 15){
                         this.gotEvent('nothing-happens', 1000, () => {
                             
                             this.rotateRandom(() => {
@@ -454,7 +454,7 @@ class Bot {
                     }
 
                     var distance = this.ranging.values
-                    if(distance < 15){
+                    if(distance < 40){
                         this.gotEvent('object-near', 300, () => {
                             this.attack()
                         })
