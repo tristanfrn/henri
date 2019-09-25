@@ -429,6 +429,8 @@ class Bot {
         }, 1000)
 
         setInterval(() => {
+
+            console.log('current action is '+this.currentAction)
             
             if(this.isActive === true){
                 
