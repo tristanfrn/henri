@@ -476,7 +476,7 @@ class Bot {
 
                 }else{
 
-                    if(this.getLastActionTime() >= 4){
+                    if(this.getLastActionTime() >= 5){
                         this.watching()
                     }
                     
