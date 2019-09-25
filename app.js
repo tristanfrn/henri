@@ -258,10 +258,10 @@ class Bot {
 
     moveBackward(time, callback){
         
-        if(this.currentAction !== "moving-forward"){
+        if(this.currentAction !== "moving-backward"){
 
-            console.log('moving-forward')
-            this.currentAction = "moving-forward"
+            console.log('moving-backward')
+            this.currentAction = "moving-backward"
 
             this.motor.move('backward', {
                 time: time
@@ -402,7 +402,9 @@ class Bot {
                     var distance = this.ranging.values
                     if(distance < 70){
                         this.gotEvent('object-near', 300, () => {
-                            this.stop(this.watching)
+                            this.stop(() => {
+                                this.watching()
+                            })
                         })
                     }
 
@@ -411,7 +413,9 @@ class Bot {
                     if(this.getLastActionTime() > 15){
                         this.gotEvent('nothing-happens', 1000, () => {
                             this.rotateRandom(() => {
-                                this.moveForward(6, this.watching)
+                                this.moveForward(3, () => {
+                                    this.watching()
+                                })
                             })
                         })
                     }
@@ -422,7 +426,9 @@ class Bot {
                             console.log('call attack');
                             this.attack(() => {
                                 console.log('callback attach');
-                                this.moveBackward(2, this.watching)
+                                this.moveBackward(2, () => {
+                                    this.watching()
+                                })
                             })
                         })
                     }
