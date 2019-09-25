@@ -9,7 +9,7 @@ function checkMovement(){
 
     picture_i = picture_i == 0 ? 1 : 0;
 
-    spawn('raspistill', ['-o', 'cam'+picture_i+'.jpg'])
+    spawn('raspistill', ['-o', 'raspistill -w 480 -h 360 -n -gc -th none -x none -t 2000 -o '+picture_i+'.jpg'])
     
     Jimp.read('cam0.jpg')
         .then(image1 => {
