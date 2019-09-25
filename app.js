@@ -118,10 +118,12 @@ class Motor {
     
     stop() {
         this.lastDirection = null
-        this.process.kill('SIGTERM')
-        setTimeout(() => {
-            this.move('stop')
-        }, 400)
+        if(this.process != null){
+            this.process.kill('SIGTERM')
+            setTimeout(() => {
+                this.move('stop')
+            }, 400)
+        }
     }
 }
 
@@ -275,7 +277,6 @@ class Bot {
 
             console.log('stopping')
             this.currentAction = "stopping"
-
             this.motor.stop()
 
             callback()
@@ -440,7 +441,7 @@ class Bot {
 
                 }else{
 
-                    if(this.getLastActionTime() >= 5){
+                    if(this.getLastActionTime() >= 15){
                         this.watching()
                     }
                     
