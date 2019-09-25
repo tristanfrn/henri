@@ -24,7 +24,7 @@ function checkMovement(){
         })
         .catch(err => {
             console.log(err)
-            checkMovement()
+            checkMovement() 
         })
     
 }
