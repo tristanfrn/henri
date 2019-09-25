@@ -230,7 +230,7 @@ class Bot {
             this.currentAction = "rotating-random"
 
             this.motor.move('right', {
-                time: Math.random()*2
+                time: Math.random()*5
             }, callback)
 
         }
@@ -285,45 +285,6 @@ class Bot {
 
         }
 
-    }
-
-    checkMovement(){
-
-        if(this.currentAction == "watching"){
-
-            console.log('Watching, taking picture')
-
-            this.picture_i = this.picture_i === undefined ? 1 : this.picture_i;
-            this.picture_i = this.picture_i == 0 ? 1 : 0;
-
-            spawn('raspistill', ['-o', 'cam'+this.picture_i+'.jpg'])
-            
-            Jimp.read('cam0.jpg')
-                .then(image1 => {
-                    Jimp.read('cam1.jpg')
-                        .then(image2 => {
-                            var distance = Jimp.distance(image1, image2)
-                            // var diff = Jimp.diff(image1, image2)
-                            console.log(distance)
-                            this.checkMovement()
-                        })
-                        .catch(err => {
-                            console.log(err)
-                            this.checkMovement()
-                        })
-                })
-                .catch(err => {
-                    console.log(err)
-                    this.checkMovement()
-                })
-
-        }else{
-
-            setTimeout(() => {
-                this.checkMovement()
-            }, 1000)
-        }
-        
     }
 
     // resetWatchingTimeout(){
@@ -385,10 +346,6 @@ class Bot {
             this.setLastActionTime()
             this.watching()
 
-            // setTimeout(() => {
-                // this.checkMovement()
-            // }, 1000)
-
         }, 1000)
 
         setInterval(() => {
@@ -449,7 +406,7 @@ class Bot {
 
                 }else{
 
-                    if(this.getLastActionTime() >= 15){
+                    if(this.getLastActionTime() >= 20){
                         this.watching()
                     }
                     
