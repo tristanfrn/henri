@@ -393,7 +393,7 @@ class Bot {
 
         setInterval(() => {
 
-            console.log('current action is '+this.currentAction)
+            // console.log('current action is '+this.currentAction)
             
             if(this.isActive === true){
                 
