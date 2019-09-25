@@ -1,3 +1,6 @@
+const { spawn } = require('child_process');
+const Jimp = require('jimp');
+
 var picture_i = 0
 
 function checkMovement(){
