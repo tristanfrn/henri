@@ -131,7 +131,7 @@ class Servo {
         this.status = "ended"
         this.channel = channel
     }
-    move(angle, delay) {
+    move(angle, delay, callback) {
 
         if(this.status === "ended") {
 
@@ -145,11 +145,14 @@ class Servo {
                 
                 this.process.stdout.on('data', (data) => {
                     var temp_status = data.toString().trim()
-                    if(temp_status == "ended"){
-                        this.status = "ended"
-                    }
                     if(temp_status == "moving"){
                         this.status = "moving"
+                    }
+                    if(temp_status == "ended"){
+                        this.status = "ended"
+                        if(callback != undefined){
+                            callback()
+                        }
                     }
                 })
 
@@ -194,6 +197,7 @@ class Bot {
 
             this.currentAction = "watching"
     
+            this.stop()
             this.servoHorizontal.move(90)
             this.servoVertical.move(40, 700)
 
@@ -201,60 +205,19 @@ class Bot {
 
     }
 
-    attack(){
+    attack(callback){
         if(this.currentAction !== "attacking"){
 
             console.log('attacking')
             this.currentAction = "attacking"
     
-            // this.servoHorizontal.move(90)
-            // this.servoVertical.move(40, 500)
-            this.servoVertical.move(140)
-    
-            // this.resetWatchingTimeout()
+            // this.servoHorizontal.move(90, 0, () => {
+                // this.servoVertical.move(40, 0, () => {
+                    this.servoVertical.move(140, callback)
+                // })
+            // })
 
         }
-    }
-
-    escapeLeft(){
-
-        if(this.currentAction !== "escape-left"){
-
-            console.log('escape-left')
-            this.currentAction = "escape-left"
-
-            this.servoVertical.move(125)
-            this.servoHorizontal.move(30, 500)
-            // var vertical_angle = Math.floor(Math.random() * 40 + 90)
-            
-            this.motor.move('left', {
-                time: 0.25
-            })
-
-            // this.resetWatchingTimeout()
-
-        }
-
-    }
-
-    escapeRight(){
-
-        if(this.currentAction !== "escape-right"){
-
-            console.log('escape-right')
-            this.currentAction = "escape-right"
-
-            this.servoVertical.move(150)
-            this.servoHorizontal.move(140, 500)
-            // var vertical_angle = Math.floor(Math.random() * 40 + 90)
-
-            this.motor.move('right', {
-                time: 0.25
-            })
-
-            // this.resetWatchingTimeout()
-        }
-
     }
     
     rotateRandom(callback){
@@ -272,29 +235,26 @@ class Bot {
 
     }
 
-    moveForward(){
+    moveForward(time, callback){
         
         if(this.currentAction !== "moving-forward"){
 
             console.log('moving-forward')
             this.currentAction = "moving-forward"
 
-            this.servoHorizontal.move(90)
-            this.servoVertical.move(120, 600)
-
-            this.motor.move('forward', {
-                time: 6
+            this.servoHorizontal.move(90, () => {
+                this.servoVertical.move(120)
             })
 
-            // setTimeout(() => {
-            //     this.resetWatchingTimeout()
-            // }, 10000)
+            this.motor.move('forward', {
+                time: time
+            }, callback)
 
         }
 
     }
 
-    moveBackward(){
+    moveBackward(time, callback){
         
         if(this.currentAction !== "moving-forward"){
 
@@ -302,14 +262,14 @@ class Bot {
             this.currentAction = "moving-forward"
 
             this.motor.move('backward', {
-                time: 2
-            })
+                time: time
+            }, callback)
 
         }
 
     }
 
-    stop(){
+    stop(callback){
         
         if(this.currentAction !== "stopping"){
 
@@ -317,6 +277,8 @@ class Bot {
             this.currentAction = "stopping"
 
             this.motor.stop()
+
+            callback()
 
             // this.resetWatchingTimeout()
 
@@ -422,9 +384,9 @@ class Bot {
             this.setLastActionTime()
             this.watching()
 
-            setTimeout(() => {
+            // setTimeout(() => {
                 // this.checkMovement()
-            }, 1000)
+            // }, 1000)
 
         }, 1000)
 
@@ -437,9 +399,9 @@ class Bot {
                 if(this.currentAction == "moving-forward"){
 
                     var distance = this.ranging.values
-                    if(distance < 40){
+                    if(distance < 70){
                         this.gotEvent('object-near', 300, () => {
-                            this.stop()
+                            this.stop(this.watching)
                         })
                     }
 
@@ -447,31 +409,31 @@ class Bot {
                     
                     if(this.getLastActionTime() > 15){
                         this.gotEvent('nothing-happens', 1000, () => {
-                            
                             this.rotateRandom(() => {
-                                this.moveForward()
+                                this.moveForward(6, this.watching)
                             })
-
                         })
                     }
 
                     var distance = this.ranging.values
                     if(distance < 40){
                         this.gotEvent('object-near', 300, () => {
-                            this.attack()
+                            this.attack(() => {
+                                this.moveBackward(2, this.watching)
+                            })
                         })
                     }
 
                     if(this.infrared.values.right == false){
                         
                         this.gotEvent('object-near-right', 500, () => {
-                            this.escapeLeft()
+                            console.log('has object near right')
                         })
                         
                     }else if(this.infrared.values.left == false){
                         
                         this.gotEvent('object-near-left', 500, () => {
-                            this.escapeRight()
+                            console.log('has object near right')
                         })
                 
                     }

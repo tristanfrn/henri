@@ -20,7 +20,7 @@ if(var1 == 1):
 print("moving")
 
 servo.set_pwm(var1, 0, var3)
-time.sleep(0.5)
+time.sleep(0.4)
 servo.set_pwm(var1, 0, 0)
 
 print("ended")
