@@ -254,6 +254,36 @@ class Bot {
 
     }
 
+    rotateLeft(time, callback){
+
+        if(this.currentAction !== "rotating-left"){
+
+            console.log('rotating-left')
+            this.currentAction = "rotating-left"
+
+            this.motor.move('left', {
+                time: time
+            }, callback)
+
+        }
+
+    }
+
+    rotateRight(time, callback){
+
+        if(this.currentAction !== "rotating-right"){
+
+            console.log('rotating-right')
+            this.currentAction = "rotating-right"
+
+            this.motor.move('right', {
+                time: time
+            }, callback)
+
+        }
+
+    }
+
     moveForward(time, callback){
         
         if(this.currentAction !== "moving-forward"){
@@ -411,19 +441,25 @@ class Bot {
                         
                         this.gotEvent('object-near-right', 500, () => {
                             console.log('has object near right')
+                            this.moveLeft(2, () => {
+                                this.watching()
+                            })
                         })
                         
                     }else if(this.infrared.values.left == false){
                         
                         this.gotEvent('object-near-left', 500, () => {
                             console.log('has object near right')
+                            this.moveRight(2, () => {
+                                this.watching()
+                            })
                         })
                 
                     }
 
                 }else{
 
-                    if(this.getLastActionTime() >= 10){
+                    if(this.getLastActionTime() >= 7){
 
                         this.moveFlag(() => {
                             this.watching()
