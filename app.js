@@ -221,6 +221,23 @@ class Bot {
 
         }
     }
+
+    moveFlag(callback){
+        if(this.currentAction !== "moving-flag"){
+
+            console.log('moving-flag')
+            this.currentAction = "moving-flag"
+    
+            this.servoHorizontal.move(90, 0, () => {
+                this.servoVertical.move(100, 0, () => {
+                    this.servoVertical.move(140, 0, => {
+                        this.servoVertical.move(100, 0, callback)
+                    })
+                })
+            })
+
+        }
+    }
     
     rotateRandom(callback){
 
@@ -406,8 +423,12 @@ class Bot {
 
                 }else{
 
-                    if(this.getLastActionTime() >= 20){
-                        this.watching()
+                    if(this.getLastActionTime() >= 10){
+
+                        this.moveFlag(() => {
+                            this.watching()
+                        })
+                        
                     }
                     
                 }
