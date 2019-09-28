@@ -230,7 +230,7 @@ class Bot {
     
             this.servoHorizontal.move(90, 0, () => {
                 this.servoVertical.move(100, 0, () => {
-                    this.servoVertical.move(140, 0, => {
+                    this.servoVertical.move(140, 0, () => {
                         this.servoVertical.move(100, 0, callback)
                     })
                 })
@@ -428,7 +428,7 @@ class Bot {
                         this.moveFlag(() => {
                             this.watching()
                         })
-                        
+
                     }
                     
                 }
