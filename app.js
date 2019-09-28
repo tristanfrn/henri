@@ -441,7 +441,7 @@ class Bot {
                         
                         this.gotEvent('object-near-right', 500, () => {
                             console.log('has object near right')
-                            this.moveLeft(2, () => {
+                            this.rotateLeft(2, () => {
                                 this.watching()
                             })
                         })
@@ -450,7 +450,7 @@ class Bot {
                         
                         this.gotEvent('object-near-left', 500, () => {
                             console.log('has object near right')
-                            this.moveRight(2, () => {
+                            this.rotateRight(2, () => {
                                 this.watching()
                             })
                         })
